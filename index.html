@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>台灣免費 wifi 熱點</title>
+	<style>
+		h1{
+			text-align: center;
+		}
+		#map {
+			height: 80vh;
+			width: 90vw;
+			margin: 0 auto;
+		}
+    </style>
+</head>
+<body>
+	<h1>台灣免費 wifi 熱點</h1>
+    <div id="map"></div>
+    <script>
+		function initMap() {
+			var uluru = {lat: 25.013866, lng: 121.541154};
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 15,
+				center: uluru
+			});
+		
+			var xhr = new XMLHttpRequest();
+			xhr.open('get','./itw_tw.json');
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4){
+					var data = JSON.parse(xhr.responseText);
+					// console.log(data);
+					data.forEach(function(value,index){
+						var lat = value.LATITUDE;
+						var lng = value.LONGITUDE;
+						var position = new google.maps.LatLng(lat, lng);
+						var marker = new google.maps.Marker({
+							position: position,
+							map: map
+						});
+					});
+				}
+			}
+			xhr.send();
+		}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGFGT0Xk7oBnCPzWhXhPhyk3CPPA63DTQ&callback=initMap">
+    </script>
+</body>
+</html>
